@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
   "name": "Better Comments Bitbucket",
-  "description": "Esta extension le brinda un acceso directo a los conventional comments en bBitbucket.",
   "version": "0.0.1",
+  "description":"Esta extensión proporciona un acceso directo directo a los comentarios convencionales en Bitbucket, facilitando la interacción con la plataforma mediante la integración de comentarios estandarizados y estructurados.",
   "content_scripts": [
     {
       "matches": ["*://*/**/*/pull-requests/*"],
