@@ -1,0 +1,36 @@
+{
+  "manifest_version": 3,
+  "name": "Better Comments Bitbucket",
+  "description": "Esta extension le brinda un acceso directo a los conventional comments en bBitbucket.",
+  "version": "0.0.1",
+  "content_scripts": [
+    {
+      "matches": ["*://*/**/*/pull-requests/*"],
+      "css": ["src/style.css"],
+      "js": ["src/index.js"],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": ["*://bitbucket.org/**/*/pull-requests/*"],
+      "css": ["src/style.css"],
+      "js": ["src/index.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "matches": ["*://*/*"],
+      "resources": ["src/*"]
+    }
+  ],
+  "action": {
+    "default_popup": "src/popup/index.html",
+    "default_icon": {
+      "16": "icons/icon.png",
+      "48": "icons/icon.png",
+      "128": "icons/icon.png"
+    }
+  },
+  "permissions": ["clipboardRead", "clipboardWrite", "storage"],
+  "host_permissions": ["*://*/*"]
+}
