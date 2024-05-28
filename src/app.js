@@ -142,7 +142,7 @@ const showHideDecoratorList = (shouldShow) => {
 const addSemanticButtons = async (contentEditable) => {
   const childEditorWrapper = contentEditable?.closest(selectors.editorWrapper)
   const editorWrapper = childEditorWrapper.parentElement
-  const controls = editorWrapper.querySelector(selectors.controls)
+  const controls = null
   // console.log(controls, 'controls')
   const toolbar = editorWrapper.querySelector(selectors.toolbar)
   const cancelButton = editorWrapper.querySelector(selectors.cancelButton)
@@ -285,26 +285,47 @@ const updateCheckbox = (decorator, checked) => {
 }
 
   // Asigna el event listener click fuera de la función run
+  const processedElements = new Set();
 
-// document.addEventListener("click", (e) => {
-//   if ( e.target.dataset.qa === "pr-diff-file-comment"  && !e.target.parentElement.querySelector('div#bbcc-toolbar')) {
-//     console.log(e, 'e en el padre')
-//     //Todo: emviar bien este paremtro usando trraversion JS
-//     console.log(e.target.parentElement.querySelector('div#ak-editor-textarea'))
-//     addSemanticButtons(e.target.parentElement.querySelector('div#ak-editor-textsarea'))
-//   }
-// })
 
-  document.addEventListener("click", (e) => {
-    if ((e.target.className.includes("add-comment-button") || e.target.dataset.qa === "pr-diff-file-comment" ) && !e.target.parentElement.querySelector('div#bbcc-toolbar')) {
-      addSemanticButtons(e.target.parentElement.querySelector('div#ak-editor-textarea'))
-    }
-  })
 
   setInterval(()=>{
     document.addEventListener("click", (e) => {
       if ((e.target.className.includes("add-comment-button") || e.target.dataset.qa === "pr-diff-file-comment" ) && !e.target.parentElement.querySelector('div#bbcc-toolbar')) {
-        addSemanticButtons(e.target.parentElement.querySelector('div#ak-editor-textarea'))
+        if (!processedElements.has(e.target.parentElement.querySelector('div#ak-editor-textarea'))) {
+              addSemanticButtons(e.target.parentElement.querySelector('div#ak-editor-textarea'))
+                  processedElements.add(e.target.parentElement.querySelector('div#ak-editor-textarea'));
+              }
       }
     })
   }, 2000)
+
+
+  document.addEventListener("click", (e) => {
+      console.log('e', e.target.tagName);
+      const isPMethod = e.target.tagName === 'P';
+      const targetClasses = e.target.classList;
+      const classNamesToCheck = [
+          'ak-editor-content-area', 'less-margin', 'css-nrvbbf', 'rah-static', 
+          'rah-static--height-auto', 'panel-content', 'css-1t1r6lz', 'e1b7yyjs2', 
+          'css-9v93io'
+      ];
+  
+      if (classNamesToCheck.some(className => targetClasses.contains(className)) || isPMethod) {
+          console.log('entro por P o clases');
+          const parentElement = isPMethod ? e.target.parentElement.parentElement : e.target.parentElement.parentElement;
+          console.log(e.target.parentElement, 'e.target.parentElement;');
+          console.log('parentElement selec', parentElement);
+          console.log(processedElements, 'processedElements');
+          
+          const editorTextarea = parentElement.querySelector('div#ak-editor-textarea');
+  
+          // Check if the element has already been processed
+          if (!processedElements.has(editorTextarea)) {
+            console.log(editorTextarea, 'editorTextarea qe se hizo clic')
+              addSemanticButtons(editorTextarea);
+              processedElements.add(editorTextarea);
+              console.log(processedElements, 'processedElements')
+          }
+      }
+  });
