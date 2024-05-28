@@ -14,25 +14,4 @@ export const warnAboutUnconventionalComments = ({ controls, contentEditable }) =
     return // don't warn on edits
   }
 
-  // const nonCancelButtons = controls?.querySelectorAll(selectors.nonCancelButton)
-
-  // const handleClick = (e) => {
-  //   const hasConventionalCommentPrefix = !!getConventionalCommentPrefix(contentEditable.innerText)
-  //   if (
-  //     !hasConventionalCommentPrefix &&
-  //     !confirm('Missing or invalid conventional comment prefix. Send anyway?')
-  //   ) {
-  //     e.stopImmediatePropagation()
-  //   }
-  // }
-
-  // const unsubscribe = state.subscribe(UNCONVENTIONAL_WARNING, (enabled = true) => {
-  //   if (!controls.isConnected) {
-  //     unsubscribe()
-  //   } else if (enabled) {
-  //     nonCancelButtons.forEach((el) => el.addEventListener('click', handleClick))
-  //   } else {
-  //     nonCancelButtons.forEach((el) => el.removeEventListener('click', handleClick))
-  //   }
-  // })
 }
