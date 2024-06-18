@@ -13,8 +13,6 @@
   "devDependencies": {
     "@babel/preset-env": "^7.20.2",
     "babel-jest": "^29.4.3",
-    "jest-chrome": "^0.8.0",
-    "jest-environment-jsdom": "^29.4.3",
     "prettier": "^2.3.1"
   }
 }
