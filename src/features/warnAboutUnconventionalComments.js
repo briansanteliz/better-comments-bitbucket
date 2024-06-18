@@ -1,4 +1,4 @@
-import { state } from '../state.js'
+// import { state } from '../state.js'
 import { UNCONVENTIONAL_WARNING } from '../settings.js'
 import { selectors, classes } from '../selectors.js'
 import { getConventionalCommentPrefix } from '../utils.js'

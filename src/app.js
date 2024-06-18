@@ -1,6 +1,6 @@
 import { semanticLabels } from './labels.js'
 import { classes, ids, selectors } from './selectors.js'
-import { state } from './state.js'
+// import { state } from './state.js'
 import {
   copyToClipboard,
   createClipboardReset,
@@ -56,9 +56,6 @@ const createClickHandler = ({ contentEditable, label, blocking }) => {
       addDecorator(blocking ? 'blocking' : 'non-blocking')
     }
 
-    if (await state.get(DECORATORS_SELECTOR)) {
-      showHideDecoratorList(true)
-    }
 
     await updateConventionCommentOnTextBox(contentEditable)
   }
@@ -111,16 +108,6 @@ const createButtonPair = ({ contentEditable='', toolbar, ccToolbar, label }) => 
     createButton({ contentEditable, toolbar, container, label, blocking: true })
   }
 
-  const unsubscribe = state.subscribe(label, (shouldShow = true) => {
-    if (!container.isConnected) {
-      unsubscribe()
-    } else if (shouldShow) {
-      container.style.display = 'block'
-    }
-    container.style.display = 'block'
-
-  })
-
   ccToolbar.appendChild(container)
 }
 
@@ -141,26 +128,17 @@ const showHideDecoratorList = (shouldShow) => {
 
 const addSemanticButtons = async (contentEditable) => {
   const childEditorWrapper = contentEditable?.closest(selectors.editorWrapper)
-  const editorWrapper = childEditorWrapper.parentElement
+  const editorWrapper = childEditorWrapper?.parentElement
   const controls = null
-  // console.log(controls, 'controls')
   const toolbar = editorWrapper.querySelector(selectors.toolbar)
   const cancelButton = editorWrapper.querySelector(selectors.cancelButton)
   const nonCancelButtons = null
   const ccToolbar = createCCToolbar({ controls, editorWrapper, cancelButton, nonCancelButtons })
 
-  // console.log(contentEditable,'contentEditable')
-  // console.log(childEditorWrapper,'childEditorWrapper')
-  // console.log(editorWrapper, 'editorWrapperParentElemnets')
-  // console.log(toolbar, 'toolbar')
-
-  // console.log(ccToolbar, 'ccToolbar')
   Object.keys(semanticLabels).forEach((label) => {
     createButtonPair({ contentEditable, toolbar, ccToolbar, label })
   })
 
-  const listDecorator = (await state.get(DECORATORS_LIST_ID)) || LIST_DECORATORS.join(',')
-  // ccToolbar.appendChild(createCheckboxList(listDecorator?.split(','), contentEditable))
 
   warnAboutUnconventionalComments({ controls:{}, contentEditable })
 }
@@ -218,13 +196,6 @@ const createCheckboxList = (lists, contentEditable) => {
   })
   listDecoratorElement.appendChild(document.createTextNode(')'))
 
-  const unsubscribe = state.subscribe(DECORATORS_SELECTOR, (shouldShow = true) => {
-    if (!listDecoratorElement.isConnected) {
-      unsubscribe()
-    } else {
-      showHideDecoratorList(shouldShow)
-    }
-  })
 
   return listDecoratorElement
 }
@@ -302,7 +273,6 @@ const updateCheckbox = (decorator, checked) => {
 
 
   document.addEventListener("click", (e) => {
-      console.log('e', e.target.tagName);
       const isPMethod = e.target.tagName === 'P';
       const targetClasses = e.target.classList;
       const classNamesToCheck = [
@@ -312,20 +282,13 @@ const updateCheckbox = (decorator, checked) => {
       ];
   
       if (classNamesToCheck.some(className => targetClasses.contains(className)) || isPMethod) {
-          console.log('entro por P o clases');
           const parentElement = isPMethod ? e.target.parentElement.parentElement : e.target.parentElement.parentElement;
-          console.log(e.target.parentElement, 'e.target.parentElement;');
-          console.log('parentElement selec', parentElement);
-          console.log(processedElements, 'processedElements');
           
           const editorTextarea = parentElement.querySelector('div#ak-editor-textarea');
   
-          // Check if the element has already been processed
           if (!processedElements.has(editorTextarea)) {
-            console.log(editorTextarea, 'editorTextarea qe se hizo clic')
               addSemanticButtons(editorTextarea);
               processedElements.add(editorTextarea);
-              console.log(processedElements, 'processedElements')
           }
       }
   });
